@@ -3,5 +3,73 @@
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+<br />
+
+<p>Name : @person.SalesPerson</p>
+<p>Name : @person.Amount.ToString("c")</p>
+
+@*Here if you remove bind-value:event is onchange event*@
+<input type="number" @bind-value="person.Amount" @bind-value:event="oninput"/> 
+<label><input type="checkbox" @bind-value="person.IsActive" /> &nbsp; Is Active</label>
+<br />
+<p>Is Active : @person.IsActive</p>
+<p>
+    <label>
+        <input type="radio" value="1" name="group" checked="@(selectedGroup == 1)" @onclick="@(()=> selectedGroup = 1)"/>1
+        <input type="radio" value="2" name="group" checked="@(selectedGroup == 2)" @onclick="@(()=> selectedGroup = 2)"/>2
+    </label>
+    <br />
+    @selectedGroup
+</p>
+<p>
+    <select @bind="selectedLocationId">
+        <option value="0">Choose An Option</option>
+        @foreach (var item in person.Locations)
+        {
+            <option value="@item.Id">@item.City - @item.Country</option>
+        }
+    </select>
+    <br />
+    @selectedLocationId
+</p>
+
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+@code{
+
+    IndexViewModel person = null;
+    int selectedGroup = 1;
+    int selectedLocationId;
+    protected override void OnInitialized()
+    {
+        base.OnInitializedAsync();
+        person = new IndexViewModel()
+        {
+            Amount = 107564534.2157432,
+            SalesPerson = "sa",
+            IsActive = true,
+            Locations = new List<Location>()
+        {
+                new Location(){City = "Dhaka",ProvState = "State Uttara",Country = "Bangladesh",Id = 1},
+                new Location(){City = "Jeddah",ProvState = "State Jeddah",Country = "Saudi Arab",Id = 2},
+            }
+        };
+    }
+
+    public class IndexViewModel
+    {
+        public string SalesPerson { get; set; }
+        public double Amount { get; set; }
+        public bool IsActive { get; set; }
+        public List<Location> Locations { get; set; }
+    }
+
+    public class Location
+    {
+        public int Id { get; set; }
+        public string City { get; set; }
+        public string ProvState { get; set; }
+        public string Country { get; set; }
+    }
+}
