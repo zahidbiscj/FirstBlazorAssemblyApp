@@ -1,6 +1,26 @@
 ﻿@page "/order"
+@inject IndexedDBManager DbManager
+    
 <TitleComponent Department="Order Entry Component"></TitleComponent>
 
-    @code {
+@code {        
+    protected override async Task OnInitializedAsync()
+    {
+        Person person = new Person()
+        {
+            FirstName = "Zahid",
+            Id = 1,
+            LastName = "Ahmed"
+        };
+        var newRecord = new StoreRecord<Person>
+        {
+            Storename = "Employees",
+            Data = person
+        };
+
+        await DbManager.AddRecord<Person>(newRecord);
+        await base.OnInitializedAsync();
 
     }
+
+}
